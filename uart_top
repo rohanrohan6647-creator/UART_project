@@ -1,0 +1,41 @@
+
+module top(
+    input clk, rst,
+    input [7:0] tx_data, input tx_start,
+    output tx,           // <-- serial out pin, goes to FPGA header
+    output tx_busy,
+    input rx,            // <-- serial in pin, comes from FPGA header
+    input rdy_clr,
+    output [7:0] rx_data,
+    output rx_rdy
+);
+
+wire tx_enb, rx_enb; 
+
+baud_rate bd(
+    .clk(clk),.rst(rst), 
+    .tx_enb(tx_enb), 
+    .rx_enb(rx_enb)
+);
+
+trans tr(
+    .clk(clk), 
+    .rst(rst), 
+    .inp(tx_data), 
+    .wr(tx_start), 
+    .enb(tx_enb), 
+    .tx(tx), 
+    .busy(tx_busy)
+);
+
+receiver rxv(
+    .clk(clk), 
+    .rst(rst), 
+    .rdy_clr(rdy_clr), 
+    .clk_enb(rx_enb), 
+    .rx(rx), 
+    .data_out(rx_data), 
+    .rdy(rx_rdy)
+);
+
+endmodule
