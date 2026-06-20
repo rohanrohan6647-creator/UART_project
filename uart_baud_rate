@@ -1,0 +1,36 @@
+
+module baud_rate(
+    input clk, rst,
+    output tx_enb, 
+    output rx_enb
+);
+    parameter clk_freq = 50000000, baud_rate = 9600;
+    wire [15:0] tx_div, rx_div;
+    reg [15:0] counter_tx; 
+    reg [15:0] counter_rx; 
+ 
+    assign tx_div = clk_freq / (baud_rate);  
+    assign rx_div = clk_freq / (16 * baud_rate); 
+    
+   always @(posedge clk) begin
+    if(rst)
+        counter_tx <= 0;
+    else if(counter_tx == tx_div-1)
+        counter_tx <= 0;
+    else
+        counter_tx <= counter_tx + 1;
+end
+
+always @(posedge clk) begin
+    if(rst)
+        counter_rx <= 0;
+    else if(counter_rx == rx_div-1)
+        counter_rx <= 0;
+    else
+        counter_rx <= counter_rx + 1;
+end
+
+    assign tx_enb = (counter_tx == 0) ? 1'b1 : 1'b0;
+    assign rx_enb = (counter_rx == 0) ? 1'b1 : 1'b0;
+
+endmodule
