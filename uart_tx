@@ -1,0 +1,74 @@
+module trans(
+    input clk, rst,
+    input [7:0] inp,
+    input wr, enb,
+    output reg tx,
+    output reg busy
+);
+
+parameter IDLE= 2'b00,
+          START= 2'b01,
+          DATA= 2'b10,
+          STOP= 2'b11;
+
+reg [1:0] state;
+reg [2:0] index;
+reg [7:0] data_reg;
+
+always @(posedge clk) begin
+    if (rst) begin
+        tx<= 1'b1;
+        busy<= 1'b0;
+        state<= IDLE;
+        index<= 3'b0;
+        data_reg<= 8'b0;
+    end else begin
+        case (state)
+
+            IDLE: begin
+                tx<= 1'b1;
+                busy<= 1'b0;
+                index<= 3'b0;
+                if (wr) begin
+                    data_reg <= inp;     
+                    state<= START;
+                end else begin
+                    state <= IDLE;
+                end
+            end
+
+            START: begin
+                if (enb) begin
+                    tx<= 1'b0;       
+                    busy<= 1'b1;
+                    state<= DATA;
+                end else begin
+                    state <= START;      
+                end
+            end
+
+            DATA: begin
+                if (enb) begin
+                    if (index == 3'd7) begin 
+                        tx<= data_reg[index];
+                        state <= STOP;
+                    end else begin
+                        tx<= data_reg[index];  
+                        index <= index + 3'd1;    
+                    end
+                end
+            end
+
+            STOP: begin
+                if (enb) begin
+                    tx<= 1'b1;      
+                    busy<= 1'b0;
+                    state<= IDLE;
+                end
+            end
+            default: state <= IDLE;
+        endcase
+    end
+end
+
+endmodule
