@@ -20,7 +20,6 @@ The design supports 8-bit serial data communication using start and stop bits an
   
 ## architecture
 
-           +------------------+                              
   clk-->---|                  |                              
   rst-->---|   BAUD_RATE      |                              
            |   GENERATOR      |                              
