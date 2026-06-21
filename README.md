@@ -20,6 +20,7 @@ The design supports 8-bit serial data communication using start and stop bits an
   
 ## architecture
 
+~~~
   clk-->---|                  |                              
   rst-->---|   BAUD_RATE      |                              
            |   GENERATOR      |                              
@@ -40,7 +41,7 @@ The design supports 8-bit serial data communication using start and stop bits an
                    |                                            
                    v                                            
         rx_data[7:0]   rx_rdy                                   
-
+~~~
 ## Features
 
 FSM-based UART transmitter and reciever.
