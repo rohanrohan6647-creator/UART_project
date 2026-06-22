@@ -63,8 +63,9 @@ Verification includes:
 - End-to-end UART communication testing.
 
 ## Report
-- src/uart_tx — UART Transmitter
-- src/uart_rx.v — UART Receiver
-- src/uart_baud_rate — Baud Rate Generator
-- src/uart_top — Top-Level UART Integration
-- tb/uart_tb — Verification Testbench
+- uart_tx — UART Transmitter
+- uart_rx.v — UART Receiver
+- uart_baud_rate — Baud Rate Generator
+- uart_top — Top-Level UART Integration
+- uart_tb — Verification Testbench
+- simulation.png - output waveform
